@@ -40,3 +40,29 @@ and orderID<> "Order ID"
 select product, sum(quantity) from BIT_DB.FebSales
 where location like '%Los Angeles%'
 group by product
+
+(#9.Which locations in New York received at least 3 orders in January, and how many orders did they each receive?)
+select location, count(orderID) from BIT_DB.JanSales
+where location like '%NY%'
+group by location having count(orderID) >2
+
+(#10.How many of each type of headphone were sold in February?)
+select product, sum(quantity) from BIT_DB.FebSales
+where product like '%headphones%'
+group by product
+
+(#11.What was the average amount spent per account in February?)
+select sum(quantity*price)/ count(BIT_DB.customers.acctnum) 
+from BIT_DB.FebSales
+left join BIT_DB.customers
+on BIT_DB.FebSales.orderID=BIT_DB.customers.order_id
+
+(#12.What was the average quantity of products purchased per account in February?)
+select sum(quantity)/ count(BIT_DB.customers.acctnum) 
+from BIT_DB.FebSales
+left join BIT_DB.customers
+on BIT_DB.FebSales.orderID=BIT_DB.customers.order_id
+
+(#13.Which product brought in the most revenue in January and how much revenue did it bring in total?)
+select product, sum(quantity *price) from BIT_DB.JanSales
+group by product order by sum(quantity *price) desc limit 1
